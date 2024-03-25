@@ -1,11 +1,35 @@
-all:
-  hosts:
-    srvveeam01:
-      ansible_host: 172.20.33.26
-      ansible_port: 5985  # Porta padrão do WinRM
-      ansible_user: Administrator
-      ansible_password: 200DEV200@
-      ansible_connection: winrm
-      ansible_winrm_transport: basic
-      ansible_winrm_server_cert_validation: ignore
-      ansible_winrm_scheme: http  # ou 'https' se WinRM estiver configurado para HTTPS
+---
+- name: Playbook para criar inventário do Windows
+  hosts: 172.20.33.26
+  gather_facts: no
+  vars:
+    ansible_user: Administrator  # Usuário Administrador
+    ansible_password: 200DEV200@  # Senha do usuário Administrador
+    ansible_connection: winrm
+    ansible_winrm_transport: basic
+    ansible_winrm_server_cert_validation: ignore
+    ansible_winrm_scheme: http  # Use 'https' se WinRM estiver configurado para HTTPS
+
+  tasks:
+    - name: Obter informações do sistema usando systeminfo
+      win_command:
+        cmd: systeminfo
+      register: system_info
+      changed_when: false
+
+    - name: Exibir saída do comando systeminfo
+      debug:
+        var: system_info.stdout
+
+    - name: Criar inventário do Windows
+      set_fact:
+        windows_inventory:
+          hostname: "{{ ansible_hostname }}"
+          os_version: "{{ (system_info.stdout | regex_search('OS Version[^:]*: (.*)', '\\1') | first).split(':')[1] | trim }}"
+          memory: "{{ (system_info.stdout | regex_search('Total Physical Memory[^:]*: (.*)', '\\1') | first).split(':')[1] | trim }}"
+          processor: "{{ (system_info.stdout | regex_search('Processor\\(s\\)[^:]*: (.*)', '\\1') | first).split(':')[1] | trim }}"
+
+    - name: Exibir inventário do Windows
+      debug:
+        var: windows_inventory
+
