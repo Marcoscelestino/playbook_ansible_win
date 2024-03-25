@@ -2,6 +2,9 @@
 - name: Playbook para criar inventário do Windows
   hosts: WIN-T6DKLHF1I1P
   gather_facts: no
+  vars:
+    ansible_user: Administrator
+    ansible_password: 200DEV200@
 
   tasks:
     - name: Obter informações do sistema usando systeminfo
