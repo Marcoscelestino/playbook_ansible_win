@@ -5,7 +5,7 @@
 
   tasks:
     - name: Obter informações do sistema usando systeminfo
-      win_shell: systeminfo
+      win_command: systeminfo
       register: system_info
       changed_when: false
 
@@ -17,9 +17,9 @@
       set_fact:
         windows_inventory:
           hostname: "{{ ansible_hostname }}"
-          os_version: "{{ system_info.stdout | regex_replace('(?i)^OS Version:[ ]*','') | regex_replace('[\\r\\n]+','') }}"
-          memory: "{{ system_info.stdout | regex_replace('(?i)^Total Physical Memory:[ ]*','') | regex_replace('[\\r\\n]+','') }}"
-          processor: "{{ system_info.stdout | regex_replace('(?i)^Processor\\(s\\):[ ]*','') | regex_replace('[\\r\\n]+','') }}"
+          os_version: "{{ (system_info.stdout | regex_search('OS Version[^:]*: (.*)', '\\1') | first).strip() }}"
+          memory: "{{ (system_info.stdout | regex_search('Total Physical Memory[^:]*: (.*)', '\\1') | first).strip() }}"
+          processor: "{{ (system_info.stdout | regex_search('Processor\\(s\\)[^:]*: (.*)', '\\1') | first).strip() }}"
 
     - name: Exibir inventário do Windows
       debug:
