@@ -1,10 +1,10 @@
 ---
 - name: Playbook para criar inventário do Windows
-  hosts: WIN-T6DKLHF1I1P  # Substitua pelo nome do seu host Windows
+  hosts: 172.20.33.26
   gather_facts: no
   vars:
-    ansible_user: Administrator  # Usuário Administrador
-    ansible_password: 200DEV200@  # Senha do usuário Administrador
+    ansible_user: Administrator
+    ansible_password: 200DEV200@
     ansible_connection: winrm
     ansible_winrm_transport: basic
     ansible_winrm_server_cert_validation: ignore
