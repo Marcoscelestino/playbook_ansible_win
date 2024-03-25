@@ -17,11 +17,10 @@
       set_fact:
         windows_inventory:
           hostname: "{{ ansible_hostname }}"
-          os_version: "{{ system_info.stdout | regex_replace('(?i)^OS Version:[ ]*','') | regex_replace('[\r\n]+','') }}"
-          memory: "{{ system_info.stdout | regex_replace('(?i)^Total Physical Memory:[ ]*','') | regex_replace('[\r\n]+','') }}"
-          processor: "{{ system_info.stdout | regex_replace('(?i)^Processor\(s\):[ ]*','') | regex_replace('[\r\n]+','') }}"
+          os_version: "{{ system_info.stdout | regex_replace('(?i)^OS Version:[ ]*','') | regex_replace('[\\r\\n]+','') }}"
+          memory: "{{ system_info.stdout | regex_replace('(?i)^Total Physical Memory:[ ]*','') | regex_replace('[\\r\\n]+','') }}"
+          processor: "{{ system_info.stdout | regex_replace('(?i)^Processor\\(s\\):[ ]*','') | regex_replace('[\\r\\n]+','') }}"
 
     - name: Exibir inventário do Windows
       debug:
         var: windows_inventory
-
