@@ -5,7 +5,7 @@
 
   tasks:
     - name: Obter informações do sistema usando systeminfo
-      raw: systeminfo
+      win_command: systeminfo
       register: system_info
       changed_when: false
 
@@ -24,5 +24,3 @@
     - name: Exibir inventário do Windows
       debug:
         var: windows_inventory
-
-
