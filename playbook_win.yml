@@ -1,11 +1,11 @@
 ---
 - name: Playbook para criar inventário do Windows
   hosts: all
-  gather_facts: no  # Desativa a coleta automática de fatos para este playbook
+  gather_facts: no
 
   tasks:
     - name: Obter informações do sistema usando systeminfo
-      win_command: systeminfo
+      win_shell: systeminfo
       register: system_info
       changed_when: false
 
@@ -17,10 +17,11 @@
       set_fact:
         windows_inventory:
           hostname: "{{ ansible_hostname }}"
-          os_version: "{{ system_info.stdout | regex_search('OS Version[^:]*: (.*)', '\\1') | first | trim }}"
-          memory: "{{ system_info.stdout | regex_search('Total Physical Memory[^:]*: (.*)', '\\1') | first | trim }}"
-          processor: "{{ system_info.stdout | regex_search('Processor\\(s\\)[^:]*: (.*)', '\\1') | first | trim }}"
+          os_version: "{{ (system_info.stdout | regex_search('OS Version[^:]*: (.*)', '\\1') | first).split(':')[1] | trim }}"
+          memory: "{{ (system_info.stdout | regex_search('Total Physical Memory[^:]*: (.*)', '\\1') | first).split(':')[1] | trim }}"
+          processor: "{{ (system_info.stdout | regex_search('Processor\\(s\\)[^:]*: (.*)', '\\1') | first).split(':')[1] | trim }}"
 
     - name: Exibir inventário do Windows
       debug:
         var: windows_inventory
+
