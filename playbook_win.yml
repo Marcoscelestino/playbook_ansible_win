@@ -1,6 +1,6 @@
 ---
 - name: Playbook para criar inventário do Windows
-  hosts: 172.20.33.26
+  hosts: srvveeam01
   gather_facts: no
 
   tasks:
