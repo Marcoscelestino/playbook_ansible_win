@@ -24,4 +24,3 @@
     - name: Exibir inventário do Windows
       debug:
         var: windows_inventory
-
