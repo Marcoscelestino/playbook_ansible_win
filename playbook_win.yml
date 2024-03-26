@@ -1,6 +1,6 @@
 ---
 - name: Playbook para criar inventário do Windows
-  hosts: 172.20.33.26
+  hosts: all
   gather_facts: no
   vars:
     ansible_user: Administrator  # Usuário Administrador
@@ -8,7 +8,7 @@
     ansible_connection: winrm
     ansible_winrm_transport: basic
     ansible_winrm_server_cert_validation: ignore
-    ansible_winrm_scheme: http  # Use 'https' se WinRM estiver configurado para HTTPS
+    ansible_winrm_scheme: https  # Use 'https' se WinRM estiver configurado para HTTPS
 
   tasks:
     - name: Obter informações do sistema usando systeminfo
