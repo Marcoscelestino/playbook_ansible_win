@@ -4,8 +4,7 @@
 
   tasks:
     - name: Obter informações do sistema usando systeminfo
-      win_command:
-        cmd: systeminfo
+      win_shell: systeminfo
       register: system_info
       changed_when: false
 
@@ -24,3 +23,4 @@
     - name: Exibir inventário do Windows
       debug:
         var: windows_inventory
+
